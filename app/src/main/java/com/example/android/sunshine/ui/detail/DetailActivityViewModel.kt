@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-package com.example.android.sunshine.data.database
+package com.example.android.sunshine.ui.detail
 
-import android.arch.persistence.room.TypeConverter
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 
-import java.util.Date
+import com.example.android.sunshine.data.database.WeatherEntry
 
 /**
- * [TypeConverter] for long to [Date]
- *
- *
- * This stores the date as a long in the database, but returns it as a [Date]
+ * [ViewModel] for [DetailActivity]
  */
-class DateConverter {
-    @TypeConverter
-    fun toDate(timestamp: Long?): Date? {
+class DetailActivityViewModel : ViewModel() {
+    // Weather forecast the user is looking at
+    var weather: MutableLiveData<WeatherEntry> = MutableLiveData()
 
-        return if (timestamp == null) null else Date(timestamp)
+
+    fun setWeather(weatherEntry: WeatherEntry) {
+        weather.postValue(weatherEntry)
     }
 
-    @TypeConverter
-    fun toTimestamp(date: Date?): Long? {
-        return date?.time
-    }
 }

@@ -20,22 +20,20 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 import java.util.*
-import com.example.android.sunshine.R.id.pressure
-import com.example.android.sunshine.R.id.humidity
 
 
 
 @Entity(tableName = "weather", indices = [(Index(value = ["date"], unique = true))])
 data class WeatherEntry(
-        val weatherIconId: Int,
-        val date: Date?,
-        val min: Double,
-        val max: Double,
-        val humidity: Double,
-        val pressure: Double,
-        val wind: Double,
-        val degrees: Double) {
+        var weatherIconId: Int,
+        var date: Date?,
+        var min: Double,
+        var max: Double,
+        var humidity: Double,
+        var pressure: Double,
+        var wind: Double,
+        var degrees: Double) {
 
         @PrimaryKey(autoGenerate = true)
-        val id: Int = 0
+        var id: Int = 0
 }
