@@ -59,7 +59,7 @@ public class DetailActivity extends AppCompatActivity {
          ****************/
 
         int weatherId = weatherEntry.getWeatherIconId();
-        int weatherImageId = SunshineWeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId);
+        int weatherImageId = SunshineWeatherUtils.INSTANCE.getLargeArtResourceIdForWeatherCondition(weatherId);
 
         /* Set the resource ID on the icon to display the art */
         mDetailBinding.primaryInfo.weatherIcon.setImageResource(weatherImageId);
@@ -83,7 +83,7 @@ public class DetailActivity extends AppCompatActivity {
          * Weather Description *
          ***********************/
         /* Use the weatherId to obtain the proper description */
-        String description = SunshineWeatherUtils.getStringForWeatherCondition(DetailActivity.this, weatherId);
+        String description = SunshineWeatherUtils.INSTANCE.getStringForWeatherCondition(DetailActivity.this, weatherId);
 
         /* Create the accessibility (a11y) String from the weather description */
         String descriptionA11y = getString(R.string.a11y_forecast, description);
@@ -106,7 +106,7 @@ public class DetailActivity extends AppCompatActivity {
          * the temperature. This method will also append either °C or °F to the temperature
          * String.
          */
-        String highString = SunshineWeatherUtils.formatTemperature(DetailActivity.this, maxInCelsius);
+        String highString = SunshineWeatherUtils.INSTANCE.formatTemperature(DetailActivity.this, maxInCelsius);
 
         /* Create the accessibility (a11y) String from the weather description */
         String highA11y = getString(R.string.a11y_high_temp, highString);
@@ -125,7 +125,7 @@ public class DetailActivity extends AppCompatActivity {
          * the temperature. This method will also append either °C or °F to the temperature
          * String.
          */
-        String lowString = SunshineWeatherUtils.formatTemperature(DetailActivity.this, minInCelsius);
+        String lowString = SunshineWeatherUtils.INSTANCE.formatTemperature(DetailActivity.this, minInCelsius);
 
         String lowA11y = getString(R.string.a11y_low_temp, lowString);
 
@@ -153,7 +153,7 @@ public class DetailActivity extends AppCompatActivity {
         /* Read wind speed (in MPH) and direction (in compass degrees)*/
         double windSpeed = weatherEntry.getWind();
         double windDirection = weatherEntry.getDegrees();
-        String windString = SunshineWeatherUtils.getFormattedWind(DetailActivity.this, windSpeed, windDirection);
+        String windString = SunshineWeatherUtils.INSTANCE.getFormattedWind(DetailActivity.this, windSpeed, windDirection);
         String windA11y = getString(R.string.a11y_wind, windString);
 
         /* Set the text and content description (for accessibility purposes) */

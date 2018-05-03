@@ -126,7 +126,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         /***********************
          * Weather Description *
          ***********************/
-        String description = SunshineWeatherUtils.getStringForWeatherCondition(mContext, weatherIconId);
+        String description = SunshineWeatherUtils.INSTANCE.getStringForWeatherCondition(mContext, weatherIconId);
          /* Create the accessibility (a11y) String from the weather description */
         String descriptionA11y = mContext.getString(R.string.a11y_forecast, description);
 
@@ -143,7 +143,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
           * the temperature. This method will also append either °C or °F to the temperature
           * String.
           */
-        String highString = SunshineWeatherUtils.formatTemperature(mContext, highInCelsius);
+        String highString = SunshineWeatherUtils.INSTANCE.formatTemperature(mContext, highInCelsius);
          /* Create the accessibility (a11y) String from the weather description */
         String highA11y = mContext.getString(R.string.a11y_high_temp, highString);
 
@@ -160,7 +160,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
           * the temperature. This method will also append either °C or °F to the temperature
           * String.
           */
-        String lowString = SunshineWeatherUtils.formatTemperature(mContext, lowInCelsius);
+        String lowString = SunshineWeatherUtils.INSTANCE.formatTemperature(mContext, lowInCelsius);
         String lowA11y = mContext.getString(R.string.a11y_low_temp, lowString);
 
          /* Set the text and content description (for accessibility purposes) */
@@ -182,11 +182,11 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         switch (viewType) {
 
             case VIEW_TYPE_TODAY:
-                return SunshineWeatherUtils
+                return SunshineWeatherUtils.INSTANCE
                         .getLargeArtResourceIdForWeatherCondition(weatherIconId);
 
             case VIEW_TYPE_FUTURE_DAY:
-                return SunshineWeatherUtils
+                return SunshineWeatherUtils.INSTANCE
                         .getSmallArtResourceIdForWeatherCondition(weatherIconId);
 
             default:
