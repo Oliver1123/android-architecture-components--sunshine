@@ -17,8 +17,6 @@ package com.example.android.sunshine.data.network
 
 import android.app.IntentService
 import android.content.Intent
-import android.util.Log
-
 import com.example.android.sunshine.utilities.InjectorUtils
 import timber.log.Timber
 

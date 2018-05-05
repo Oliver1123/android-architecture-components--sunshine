@@ -124,8 +124,12 @@ class WeatherNetworkDataSource private constructor(private val mContext: Context
                 // Use the URL to retrieve the JSON
                 val jsonWeatherResponse = NetworkUtils.getResponseFromHttpUrl(weatherRequestUrl)
 
+                if (jsonWeatherResponse == null) {
+                    Timber.e("Nothing to parse")
+                    return@execute
+                }
                 // Parse the JSON into a list of weather forecasts
-                val response = OpenWeatherJsonParser().parse(jsonWeatherResponse)
+                val response = OpenWeatherJsonParser.parse(jsonWeatherResponse)
                 Timber.d("JSON Parsing finished")
 
 

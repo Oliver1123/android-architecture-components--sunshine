@@ -16,9 +16,8 @@
 package com.example.android.sunshine.utilities
 
 import android.content.Context
-import android.util.Log
-
 import com.example.android.sunshine.R
+import timber.log.Timber
 
 /**
  * Contains useful utilities for displaying weather forecasts, such as conversion between Celsius
@@ -27,8 +26,6 @@ import com.example.android.sunshine.R
  * res/values/strings.xml
  */
 object SunshineWeatherUtils {
-
-    private val LOG_TAG = SunshineWeatherUtils::class.java.simpleName
 
     /**
      * Temperature data is stored in Celsius by our app. Depending on the user's preference,
@@ -190,7 +187,7 @@ object SunshineWeatherUtils {
             in 958..962 -> R.drawable.ic_storm
             in 951..957 -> R.drawable.ic_clear
             else -> {
-                Log.e(LOG_TAG, "Unknown Weather: $weatherId")
+                Timber.e("Unknown Weather: $weatherId")
                 R.drawable.ic_storm
             }
         }
@@ -232,8 +229,8 @@ object SunshineWeatherUtils {
             in 958..962 -> R.drawable.art_storm
             in 951..957 -> R.drawable.art_clear
             else -> {
-                Log.e(LOG_TAG, "Unknown Weather: $weatherId")
-                R.drawable.art_storm
+                Timber.e("Unknown Weather: $weatherId")
+                return R.drawable.art_storm
             }
         }
     }
