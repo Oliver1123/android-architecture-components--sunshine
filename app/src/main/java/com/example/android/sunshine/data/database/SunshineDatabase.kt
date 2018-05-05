@@ -18,7 +18,7 @@ abstract class SunshineDatabase : RoomDatabase() {
         private var INSTANCE: SunshineDatabase? = null
         private val LOCK = Any()
 
-        fun getInstance(context: Context): SunshineDatabase? {
+        fun getInstance(context: Context): SunshineDatabase {
             if (INSTANCE == null) {
                 synchronized(LOCK::class) {
                     INSTANCE = Room.databaseBuilder(context.applicationContext,
@@ -26,7 +26,7 @@ abstract class SunshineDatabase : RoomDatabase() {
                             .build()
                 }
             }
-            return INSTANCE
+            return INSTANCE!!
         }
     }
 }

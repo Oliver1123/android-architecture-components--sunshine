@@ -29,9 +29,7 @@ import com.example.android.sunshine.utilities.SunshineWeatherUtils
 import java.util.Date
 import android.arch.lifecycle.ViewModelProviders
 import com.example.android.sunshine.AppExecutors
-
-
-
+import com.example.android.sunshine.utilities.InjectorUtils
 
 
 /**
@@ -54,6 +52,9 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // THIS IS JUST TO RUN THE CODE; REPOSITORY SHOULD NEVER BE CREATED IN
+        // DETAILACTIVITY
+        InjectorUtils.provideRepository(this).initializeData()
         detailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
         val timestamp = intent.getLongExtra(WEATHER_ID_EXTRA, -1)
         val date = Date(timestamp)
