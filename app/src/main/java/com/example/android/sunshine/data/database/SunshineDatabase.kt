@@ -13,20 +13,18 @@ abstract class SunshineDatabase : RoomDatabase() {
     abstract fun weatherDao(): WeatherDao
 
 
-    // For Singleton instantiation
     companion object {
-        private var INSTANCE: SunshineDatabase? = null
+        @Volatile private var INSTANCE: SunshineDatabase? = null
         private val LOCK = Any()
 
-        fun getInstance(context: Context): SunshineDatabase {
-            if (INSTANCE == null) {
-                synchronized(LOCK::class) {
-                    INSTANCE = Room.databaseBuilder(context.applicationContext,
-                            SunshineDatabase::class.java, "weather")
-                            .build()
+        fun getInstance(context: Context): SunshineDatabase =
+                INSTANCE ?: synchronized(LOCK) {
+                    INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
                 }
-            }
-            return INSTANCE!!
-        }
+
+        private fun buildDatabase(context: Context) =
+                Room.databaseBuilder(context.applicationContext,
+                        SunshineDatabase::class.java, "weather")
+                        .build()
     }
 }

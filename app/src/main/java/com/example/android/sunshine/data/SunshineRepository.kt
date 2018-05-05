@@ -93,24 +93,15 @@ class SunshineRepository private constructor(
     }
 
     companion object {
-
-        // For Singleton instantiation
+        @Volatile private var INSTANCE: SunshineRepository? = null
         private val LOCK = Any()
-        private var sInstance: SunshineRepository? = null
 
-        @Synchronized
-        fun getInstance(
-                weatherDao: WeatherDao, weatherNetworkDataSource: WeatherNetworkDataSource,
-                executors: AppExecutors): SunshineRepository {
-            Timber.d("Getting the repository")
-            if (sInstance == null) {
-                synchronized(LOCK) {
-                    sInstance = SunshineRepository(weatherDao, weatherNetworkDataSource,
-                            executors)
-                    Timber.d("Made new repository")
-                }
+        fun getInstance(weatherDao: WeatherDao, weatherNetworkDataSource: WeatherNetworkDataSource,
+                        executors: AppExecutors): SunshineRepository {
+            return  INSTANCE ?: synchronized(LOCK) {
+                INSTANCE ?: SunshineRepository(weatherDao, weatherNetworkDataSource,
+                        executors).also { INSTANCE = it }
             }
-            return sInstance!!
         }
     }
 

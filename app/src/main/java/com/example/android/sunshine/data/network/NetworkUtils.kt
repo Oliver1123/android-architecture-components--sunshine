@@ -16,21 +16,18 @@
 package com.example.android.sunshine.data.network
 
 import android.net.Uri
-import android.util.Log
-
+import timber.log.Timber
 import java.io.IOException
-import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.Scanner
-
-import timber.log.Timber
+import java.util.*
 
 /**
  * These utilities will be used to communicate with the weather servers.
  */
 internal object NetworkUtils {
+    const val NUM_DAYS = 14
 
     /*
      * Sunshine was originally built to use OpenWeatherMap's API. However, we wanted to provide
@@ -93,7 +90,7 @@ internal object NetworkUtils {
                 .appendQueryParameter(QUERY_PARAM, locationQuery)
                 .appendQueryParameter(FORMAT_PARAM, format)
                 .appendQueryParameter(UNITS_PARAM, units)
-                .appendQueryParameter(DAYS_PARAM, Integer.toString(WeatherNetworkDataSource.NUM_DAYS))
+                .appendQueryParameter(DAYS_PARAM, Integer.toString(NUM_DAYS))
                 .build()
 
         return try {

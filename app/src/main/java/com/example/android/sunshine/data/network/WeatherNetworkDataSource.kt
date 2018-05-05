@@ -29,7 +29,15 @@ import java.util.concurrent.TimeUnit
  * Provides an API for doing all operations with the server data
  */
 class WeatherNetworkDataSource private constructor(private val mContext: Context, private val mExecutors: AppExecutors) {
+    // The number of days we want our API to return, set to 14 days or two weeks
 
+
+    // Interval at which to sync with the weather. Use TimeUnit for convenience, rather than
+    // writing out a bunch of multiplication ourselves and risk making a silly mistake.
+    private val SYNC_INTERVAL_HOURS = 3
+    private val SYNC_INTERVAL_SECONDS = TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS.toLong()).toInt()
+    private val SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3
+    private val SUNSHINE_SYNC_TAG = "sunshine-sync"
     // LiveData storing the latest downloaded weather forecasts
     private val mDownloadedWeatherForecasts: MutableLiveData<Array<WeatherEntry>> = MutableLiveData()
 
@@ -140,32 +148,20 @@ class WeatherNetworkDataSource private constructor(private val mContext: Context
     }
 
     companion object {
-        // The number of days we want our API to return, set to 14 days or two weeks
-        val NUM_DAYS = 14
-
-        // Interval at which to sync with the weather. Use TimeUnit for convenience, rather than
-        // writing out a bunch of multiplication ourselves and risk making a silly mistake.
-        private val SYNC_INTERVAL_HOURS = 3
-        private val SYNC_INTERVAL_SECONDS = TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS.toLong()).toInt()
-        private val SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3
-        private val SUNSHINE_SYNC_TAG = "sunshine-sync"
-
         // For Singleton instantiation
         private val LOCK = Any()
-        private var sInstance: WeatherNetworkDataSource? = null
-
+        @Volatile private var INSTANCE: WeatherNetworkDataSource? = null
         /**
          * Get the singleton for this class
          */
         fun getInstance(context: Context, executors: AppExecutors): WeatherNetworkDataSource {
-            Timber.d("Getting the network data source")
-            if (sInstance == null) {
-                synchronized(LOCK) {
-                    sInstance = WeatherNetworkDataSource(context.applicationContext, executors)
-                    Timber.d("Made new network data source")
-                }
+            return  INSTANCE ?: synchronized(LOCK) {
+                INSTANCE ?: WeatherNetworkDataSource(context.applicationContext, executors)
+                        .also {
+                            INSTANCE = it
+                            Timber.d("Made new network data source")
+                        }
             }
-            return sInstance!!
         }
     }
 
