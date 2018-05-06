@@ -34,6 +34,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    androidExtensions {
+        experimental = true
+    }
 }
 
 // Versions number variables are defined in the module build.gradle file
