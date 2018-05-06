@@ -55,20 +55,20 @@ class AppExecutors private constructor(
     }
 
     companion object {
-        // TODO: 5/6/18 update singleton initialization 
         // For Singleton instantiation
         private val LOCK = Any()
+        @Volatile
         private var sInstance: AppExecutors? = null
 
-        fun getInstance(): AppExecutors {
-                if (sInstance == null) {
-                    synchronized(LOCK) {
-                        sInstance = AppExecutors(Executors.newSingleThreadExecutor(),
-                                Executors.newFixedThreadPool(3),
-                                MainThreadExecutor())
-                    }
+        fun getInstance(): AppExecutors =
+                sInstance ?: synchronized(LOCK) {
+                    sInstance ?: buildExecutors().also { sInstance = it }
                 }
-                return sInstance!!
+
+        private fun buildExecutors(): AppExecutors {
+            return AppExecutors(Executors.newSingleThreadExecutor(),
+                    Executors.newFixedThreadPool(3),
+                    MainThreadExecutor())
         }
     }
 }

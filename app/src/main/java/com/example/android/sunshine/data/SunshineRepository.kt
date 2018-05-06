@@ -114,21 +114,22 @@ class SunshineRepository private constructor(
         return weatherDao.getWeatherByDate(date)
     }
 
-    fun getCurrentWeatherForecasts():LiveData<List<ListViewWeatherEntry>> {
-           initializeData()
+    fun getCurrentWeatherForecasts(): LiveData<List<ListViewWeatherEntry>> {
+        initializeData()
         val today = SunshineDateUtils.getNormalizedUtcDateForToday()
         return weatherDao.getCurrentWeatherForecasts(today)
     }
 
     companion object {
-        @Volatile private var INSTANCE: SunshineRepository? = null
+        @Volatile
+        private var INSTANCE: SunshineRepository? = null
         private val LOCK = Any()
 
         fun getInstance(weatherDao: WeatherDao, weatherNetworkDataSource: WeatherNetworkDataSource,
                         executors: AppExecutors): SunshineRepository {
-            return  INSTANCE ?: synchronized(LOCK) {
-                INSTANCE ?: SunshineRepository(weatherDao, weatherNetworkDataSource,
-                        executors).also { INSTANCE = it }
+            return INSTANCE ?: synchronized(LOCK) {
+                INSTANCE ?: SunshineRepository(weatherDao, weatherNetworkDataSource, executors)
+                        .also { INSTANCE = it }
             }
         }
     }
