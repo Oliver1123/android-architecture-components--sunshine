@@ -26,6 +26,7 @@ import com.example.android.sunshine.databinding.ActivityDetailBinding
 import com.example.android.sunshine.utilities.InjectorUtils
 import com.example.android.sunshine.utilities.SunshineDateUtils
 import com.example.android.sunshine.utilities.SunshineWeatherUtils
+import java.util.*
 
 
 /**
@@ -48,8 +49,7 @@ class DetailActivity : AppCompatActivity() {
 
         detailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
         val timestamp = intent.getLongExtra(WEATHER_ID_EXTRA, -1)
-        val date = SunshineDateUtils.getNormalizedUtcDateForToday()
-//        val date = Date(timestamp)
+        val date = Date(timestamp)
 
         val factory = InjectorUtils.provideDetailViewModelFactory(applicationContext, date)
         viewModel = ViewModelProviders.of(this, factory).get(DetailActivityViewModel::class.java)

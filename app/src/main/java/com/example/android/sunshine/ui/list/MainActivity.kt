@@ -15,6 +15,8 @@
  */
 package com.example.android.sunshine.ui.list
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -23,9 +25,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.example.android.sunshine.R
 import com.example.android.sunshine.ui.detail.DetailActivity
+import com.example.android.sunshine.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.activity_forecast.*
 import java.util.*
-
 
 /**
  * Displays a list of the next 14 days of forecasts
@@ -34,13 +36,35 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var forecastAdapter: ForecastAdapter
 
-    private val position = RecyclerView.NO_POSITION
+    private var position = RecyclerView.NO_POSITION
+
+    private lateinit var viewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forecast)
 
+        val factory = InjectorUtils.provideMainActivityViewModelFactory(applicationContext)
+        viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel::class.java)
 
+        viewModel.forecast.observe(this, Observer { weatherEntries ->
+            weatherEntries?.run {
+                forecastAdapter.swapForecast(weatherEntries)
+                if (position == RecyclerView.NO_POSITION) position = 0
+                recyclerview_forecast.smoothScrollToPosition(position)
+                // Show the weather list or the loading screen based on whether the forecast data exists
+                // and is loaded
+                if (weatherEntries.isNotEmpty())
+                    showWeatherDataView()
+                else
+                    showLoading()
+            }
+        })
+        initRecyclerView()
+        showLoading()
+    }
+
+    private fun initRecyclerView() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerview_forecast.layoutManager = layoutManager
         recyclerview_forecast.setHasFixedSize(true)
@@ -48,7 +72,6 @@ class MainActivity : AppCompatActivity() {
 
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
         recyclerview_forecast.adapter = forecastAdapter
-        showLoading()
     }
 
     /**
@@ -56,7 +79,7 @@ class MainActivity : AppCompatActivity() {
      *
      * @param date Date of forecast
      */
-    fun onItemClick(date: Date) {
+    private fun onItemClick(date: Date) {
         val weatherDetailIntent = Intent(this@MainActivity, DetailActivity::class.java)
         val timestamp = date.time
         weatherDetailIntent.putExtra(DetailActivity.WEATHER_ID_EXTRA, timestamp)

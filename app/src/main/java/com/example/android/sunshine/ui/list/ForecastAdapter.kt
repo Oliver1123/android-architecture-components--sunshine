@@ -124,6 +124,7 @@ internal class ForecastAdapter(
      * @param newForecast the new list of forecasts to use as ForecastAdapter's data source
      */
     fun swapForecast(newForecast: List<WeatherEntry>) {
+        // TODO: 5/6/18 diffUtils can be used
         forecast.clear()
         forecast.addAll(newForecast)
         notifyDataSetChanged()
@@ -143,6 +144,14 @@ internal class ForecastAdapter(
      * OnClickListener, since it has access to the adapter and the views.
      */
     internal inner class ForecastAdapterViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        init {
+            itemView.setOnClickListener {
+                val date = forecast[adapterPosition].date
+
+                date?.let(callback)
+            }
+        }
 
         fun bind(index: Int, weatherEntry: WeatherEntry) {
             val (weatherIconId, date, lowInCelsius, highInCelsius) = weatherEntry
