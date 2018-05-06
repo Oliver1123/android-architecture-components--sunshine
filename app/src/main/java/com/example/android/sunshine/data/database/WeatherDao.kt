@@ -17,7 +17,7 @@ public interface WeatherDao {
     fun getWeatherByDate(date: Date): LiveData<WeatherEntry>
 
     @Query("SELECT * FROM weather WHERE date >= :date")
-    fun getCurrentWeatherForecasts(date: Date): LiveData<List<WeatherEntry>>
+    fun getCurrentWeatherForecasts(date: Date): LiveData<List<ListViewWeatherEntry>>
 
     @Query("SELECT COUNT(id) FROM weather WHERE date >= :date")
     fun countAllFutureWeather(date: Date): Int

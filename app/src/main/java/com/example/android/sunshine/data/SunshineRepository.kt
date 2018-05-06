@@ -18,6 +18,7 @@ package com.example.android.sunshine.data
 
 import android.arch.lifecycle.LiveData
 import com.example.android.sunshine.AppExecutors
+import com.example.android.sunshine.data.database.ListViewWeatherEntry
 import com.example.android.sunshine.data.database.WeatherDao
 import com.example.android.sunshine.data.database.WeatherEntry
 import com.example.android.sunshine.data.network.WeatherNetworkDataSource
@@ -111,7 +112,7 @@ class SunshineRepository private constructor(
         return weatherDao.getWeatherByDate(date)
     }
 
-    fun getCurrentWeatherForecasts():LiveData<List<WeatherEntry>> {
+    fun getCurrentWeatherForecasts():LiveData<List<ListViewWeatherEntry>> {
            initializeData()
         val today = SunshineDateUtils.getNormalizedUtcDateForToday()
         return weatherDao.getCurrentWeatherForecasts(today)

@@ -21,7 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.android.sunshine.R
-import com.example.android.sunshine.data.database.WeatherEntry
+import com.example.android.sunshine.data.database.ListViewWeatherEntry
 import com.example.android.sunshine.utilities.SunshineDateUtils
 import com.example.android.sunshine.utilities.SunshineWeatherUtils
 import kotlinx.android.extensions.LayoutContainer
@@ -49,7 +49,7 @@ internal class ForecastAdapter(
          * boolean resources.
          */
     private val useTodayLayout: Boolean = context.resources.getBoolean(R.bool.use_today_layout)
-    private var forecast: MutableList<WeatherEntry> = mutableListOf()
+    private var forecast: MutableList<ListViewWeatherEntry> = mutableListOf()
 
     /**
      * This gets called when each new ViewHolder is created. This happens when the RecyclerView
@@ -123,7 +123,7 @@ internal class ForecastAdapter(
      *
      * @param newForecast the new list of forecasts to use as ForecastAdapter's data source
      */
-    fun swapForecast(newForecast: List<WeatherEntry>) {
+    fun swapForecast(newForecast: List<ListViewWeatherEntry>) {
         // TODO: 5/6/18 diffUtils can be used
         forecast.clear()
         forecast.addAll(newForecast)
@@ -153,7 +153,7 @@ internal class ForecastAdapter(
             }
         }
 
-        fun bind(index: Int, weatherEntry: WeatherEntry) {
+        fun bind(index: Int, weatherEntry: ListViewWeatherEntry) {
             val (weatherIconId, date, lowInCelsius, highInCelsius) = weatherEntry
 
             val weatherImageResourceId = getImageResourceId(weatherIconId, index)
