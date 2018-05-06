@@ -15,6 +15,7 @@
  */
 package com.example.android.sunshine.data.network
 
+import com.example.android.sunshine.utilities.InjectorUtils
 import com.firebase.jobdispatcher.Job
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService
@@ -38,8 +39,8 @@ class SunshineFirebaseJobService : JobService() {
     override fun onStartJob(jobParameters: JobParameters): Boolean {
         Timber.d("Job service started")
 
-        // TODO Finish this method when instructed. Will eventually call the fetchWeather code
-
+        val networkDataSource = InjectorUtils.provideNetworkDataSource(this.applicationContext)
+        networkDataSource.fetchWeather()
         jobFinished(jobParameters, false)
 
         return true

@@ -79,6 +79,8 @@ class SunshineRepository private constructor(
         if (isInitialized) return
         isInitialized = true
 
+        weatherNetworkDataSource.scheduleRecurringFetchWeatherSync()
+
         executors.diskIO().execute {
             if (isFetchNeeded()) startFetchWeatherService()
         }

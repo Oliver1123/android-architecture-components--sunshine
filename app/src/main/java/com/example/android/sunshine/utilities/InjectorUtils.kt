@@ -39,6 +39,7 @@ object InjectorUtils {
     }
 
     fun provideNetworkDataSource(context: Context): WeatherNetworkDataSource {
+        provideRepository(context.applicationContext)
         val executors = AppExecutors.getInstance()
         return WeatherNetworkDataSource.getInstance(context.applicationContext, executors)
     }
