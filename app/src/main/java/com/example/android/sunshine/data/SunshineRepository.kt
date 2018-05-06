@@ -21,6 +21,7 @@ import com.example.android.sunshine.AppExecutors
 import com.example.android.sunshine.data.database.WeatherDao
 import com.example.android.sunshine.data.database.WeatherEntry
 import com.example.android.sunshine.data.network.WeatherNetworkDataSource
+import com.example.android.sunshine.utilities.SunshineDateUtils
 import timber.log.Timber
 import java.util.*
 
@@ -41,10 +42,12 @@ class SunshineRepository private constructor(
         val networkData = weatherNetworkDataSource.getCurrentWeatherForecasts()
         networkData.observeForever { newForecastsFromNetwork ->
             executors.diskIO().execute {
+                // Deletes old historical data
+                deleteOldData()
                 // Insert our new weather data into Sunshine's database
                 if (newForecastsFromNetwork != null) {
                     weatherDao.bulkInsert(*newForecastsFromNetwork)
-                    Timber.d("New values inserted")
+                    Timber.d("New values inserted, count: ${newForecastsFromNetwork.size}")
                 }
             }
         }
@@ -56,8 +59,10 @@ class SunshineRepository private constructor(
      * @return Whether a fetch is needed
      */
     private fun isFetchNeeded(): Boolean {
-        // TODO Finish this method when instructed
-        return true
+        val today = SunshineDateUtils.getNormalizedUtcDateForToday()
+        val futureWeather = weatherDao.countAllFutureWeather(today)
+        Timber.d("isFetchNeeded futureWeather: $futureWeather")
+        return futureWeather < 14
     }
 
 
@@ -73,7 +78,10 @@ class SunshineRepository private constructor(
         if (isInitialized) return
         isInitialized = true
 
-        startFetchWeatherService()
+        executors.diskIO().execute {
+            if (isFetchNeeded()) startFetchWeatherService()
+        }
+
     }
 
     /**
@@ -84,7 +92,9 @@ class SunshineRepository private constructor(
      * Deletes old weather data because we don't need to keep multiple days' data
      */
     private fun deleteOldData() {
-        // TODO Finish this method when instructed
+        val today = SunshineDateUtils.getNormalizedUtcDateForToday()
+        val deletedCount = weatherDao.deleteOldData(today)
+        Timber.d("deleteOldData count: $deletedCount")
     }
 
     /**

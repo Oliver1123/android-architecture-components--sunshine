@@ -15,4 +15,10 @@ public interface WeatherDao {
 
     @Query("SELECT * FROM weather WHERE date = :date")
     fun getWeatherByDate(date: Date): LiveData<WeatherEntry>
+
+    @Query("SELECT COUNT(id) FROM weather WHERE date >= :date")
+    fun countAllFutureWeather(date: Date): Int
+
+    @Query("DELETE FROM weather WHERE date < :date")
+    fun deleteOldData(date: Date): Int
 }
