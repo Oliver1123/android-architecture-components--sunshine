@@ -16,20 +16,23 @@
 
 package com.example.android.sunshine.ui.detail
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+
 import com.example.android.sunshine.data.SunshineRepository
 import com.example.android.sunshine.data.database.WeatherEntry
 import java.util.*
 
 /**
- * [ViewModel] for [DetailActivity]
+ * Factory method that allows us to create a ViewModel with a constructor that takes a
+ * [SunshineRepository] and an ID for the current [WeatherEntry]
  */
-class DetailActivityViewModel(
-        repository: SunshineRepository,
-        date: Date) : ViewModel() {
+class DetailViewModelFactory(
+        private val repository: SunshineRepository,
+        private val date: Date) : ViewModelProvider.NewInstanceFactory() {
 
-    // Weather forecast the user is looking at
-    var weather: LiveData<WeatherEntry> = repository.getWeatherByDate(date)
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
+        return DetailActivityViewModel(repository, date) as T
+    }
 }

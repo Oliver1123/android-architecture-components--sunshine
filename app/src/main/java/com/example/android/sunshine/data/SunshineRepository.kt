@@ -16,10 +16,13 @@
 
 package com.example.android.sunshine.data
 
+import android.arch.lifecycle.LiveData
 import com.example.android.sunshine.AppExecutors
 import com.example.android.sunshine.data.database.WeatherDao
+import com.example.android.sunshine.data.database.WeatherEntry
 import com.example.android.sunshine.data.network.WeatherNetworkDataSource
 import timber.log.Timber
+import java.util.*
 
 
 /**
@@ -63,7 +66,7 @@ class SunshineRepository private constructor(
      * immediate sync is required, this method will take care of making sure that sync occurs.
      */
     @Synchronized
-    fun initializeData() {
+    private fun initializeData() {
 
         // Only perform initialization once per app lifetime. If initialization has already been
         // performed, we have nothing to do in this method.
@@ -90,6 +93,12 @@ class SunshineRepository private constructor(
 
     private fun startFetchWeatherService() {
         weatherNetworkDataSource.startFetchWeatherService()
+    }
+
+
+    fun getWeatherByDate(date: Date): LiveData<WeatherEntry> {
+        initializeData()
+        return weatherDao.getWeatherByDate(date)
     }
 
     companion object {

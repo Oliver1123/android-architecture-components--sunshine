@@ -22,6 +22,8 @@ import com.example.android.sunshine.AppExecutors
 import com.example.android.sunshine.data.SunshineRepository
 import com.example.android.sunshine.data.database.SunshineDatabase
 import com.example.android.sunshine.data.network.WeatherNetworkDataSource
+import com.example.android.sunshine.ui.detail.DetailViewModelFactory
+import java.util.*
 
 /**
  * Provides static methods to inject the various classes needed for Sunshine
@@ -39,12 +41,12 @@ object InjectorUtils {
         val executors = AppExecutors.getInstance()
         return WeatherNetworkDataSource.getInstance(context.applicationContext, executors)
     }
-    //
-    //    public static DetailViewModelFactory provideDetailViewModelFactory(Context context, Date date) {
-    //        SunshineRepository repository = provideRepository(context.getApplicationContext());
-    //        return new DetailViewModelFactory(repository, date);
-    //    }
-    //
+
+    fun provideDetailViewModelFactory(context: Context , date: Date): DetailViewModelFactory {
+            val repository = provideRepository(context.applicationContext)
+            return DetailViewModelFactory(repository, date)
+        }
+
     //    public static MainViewModelFactory provideMainActivityViewModelFactory(Context context) {
     //        SunshineRepository repository = provideRepository(context.getApplicationContext());
     //        return new MainViewModelFactory(repository);
